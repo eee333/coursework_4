@@ -1,4 +1,5 @@
 from abc import ABC
+from typing import Type, Dict
 from skills import Skill, ferocious_kick, powerful_thrust
 
 
@@ -30,3 +31,9 @@ class Robber(Personage):
     attack: float = 1.5
     armor: float = 1.0
     skill: Skill = powerful_thrust
+
+
+personage_classes: Dict[str, Type[Personage]] = {
+    Warrior.name: Warrior,
+    Robber.name: Robber
+}
