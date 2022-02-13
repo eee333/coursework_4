@@ -73,7 +73,13 @@ class Hero(ABC):
         pass
 
 
+class Player(Hero):
+    def hit(self, target: Hero) -> Optional[float]:
+        self._hit(target)
+
+
 class Enemy(Hero):
     def hit(self, target: Hero) -> Optional[float]:
         if randint(1, 100) < 11 and self.stamina >= self.class_.skill.stamina and not self.skill_used:
             self.use_skill()
+        self._hit(target)
