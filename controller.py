@@ -57,19 +57,18 @@ class Game(metaclass=SingletonMeta):
             results = f"Враг нанес вам урон {delta_damage}!"
         else:
             results = "Врагу не хватило выносливости на удар."
+        return results
 
     def player_hit(self) -> str:
         delta_damage: Optional[float] = self.player.hit(self.enemy)
         if delta_damage is not None:
             self.enemy.take_damage(delta_damage)
-            return f"Вы нанесли урон {delta_damage} врагу!{self.next_turn()}"
-        return f"Вам не хватило выносливости на удар.{self.next_turn()}"
+            return f'<p>Вы нанесли урон {delta_damage} врагу!</p><p>{self.next_turn()}</p>'
+        return f'<p>Вам не хватило выносливости на удар.</p><p>{self.next_turn()}</p>'
 
     def player_use_skill(self) -> str:
         delta_damage: Optional[float] = self.player.use_skill()
         if delta_damage is not None:
             self.enemy.take_damage(delta_damage)
-            return f"Вы нанесли урон {delta_damage} врагу!{self.next_turn()}"
-        return f"Вам не хватило выносливости на удар.{self.next_turn()}"
-
-
+            return f'<p>Вы нанесли урон {delta_damage} врагу!</p><p>{self.next_turn()}</p>'
+        return f'<p>Вам не хватило выносливости на удар.</p><p>{self.next_turn()}</p>'

@@ -36,8 +36,9 @@ class Hero(ABC):
         self._stamina = value
 
     @property
-    def _total_armor(self)-> float:
-        if self.stamina - self.armor.stamina_per_turn >= 0:
+    def _total_armor(self) -> float:
+        if self.stamina >= self.armor.stamina_per_turn:
+            self.stamina -= self.armor.stamina_per_turn
             return self.armor.defence * self.class_.armor
         return 0
 
@@ -58,6 +59,7 @@ class Hero(ABC):
 
     def use_skill(self) -> Optional[float]:
         if self.stamina >= self.class_.skill.stamina and not self.skill_used:
+            self.stamina -= self.class_.skill.stamina
             self.skill_used = True
             return round(self.class_.skill.damage, 1)
         return None
@@ -75,11 +77,11 @@ class Hero(ABC):
 
 class Player(Hero):
     def hit(self, target: Hero) -> Optional[float]:
-        self._hit(target)
+        return self._hit(target)
 
 
 class Enemy(Hero):
     def hit(self, target: Hero) -> Optional[float]:
         if randint(1, 100) < 11 and self.stamina >= self.class_.skill.stamina and not self.skill_used:
             self.use_skill()
-        self._hit(target)
+        return self._hit(target)
