@@ -1,12 +1,12 @@
 from functools import wraps
-from typing import Dict, Type
+from typing import Dict
 from flask import Flask, render_template, request, url_for
 from werkzeug.utils import redirect
 
 from controller import Game
 from equipment import EquipmentData
 from hero import Player, Hero, Enemy
-from personages import personage_classes, Personage
+from personages import personage_classes
 from utils import load_equipment
 
 EQUIPMENT: EquipmentData = load_equipment()
