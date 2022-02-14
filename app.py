@@ -1,12 +1,16 @@
 from typing import Dict, Type
 from flask import Flask, render_template, request, url_for
 from werkzeug.utils import redirect
+
+from controller import Game
 from equipment import EquipmentData
 from hero import Player, Hero, Enemy
 from personages import personage_classes, Personage
 from utils import load_equipment
 
 EQUIPMENT: EquipmentData = load_equipment()
+
+game = Game()
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -58,6 +62,7 @@ def choose_enemy():
 @app.route("/fight")
 def fight():
     if "player" in heroes and "enemy" in heroes:
+        game.run(**heroes)
         return render_template("fight.html", heroes=heroes, result="Fight!")
     return redirect(url_for("index"))
 
