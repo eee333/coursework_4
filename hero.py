@@ -43,7 +43,7 @@ class Hero(ABC):
         return 0
 
     def _hit(self, target: Hero) -> Optional[float]:
-        if self.stamina - self.weapon.stamina_per_hit < 0:
+        if self.stamina < self.weapon.stamina_per_hit:
             return None
         hero_damage = self.weapon.damage * self.class_.attack
         delta_damage = hero_damage - target._total_armor
