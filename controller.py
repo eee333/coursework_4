@@ -26,6 +26,9 @@ class Game(metaclass=SingletonMeta):
         self.game_processing = True
 
     def _check_health(self) -> Optional[str]:
+        """
+        Возвращает None если оба игрока здоровы. Иначе возвращает результат игры.
+        """
         if self.player.health <= 0 and self.enemy.health <= 0:
             return self._end_game(result="В этой игре никто не победил.")
         if self.player.health <= 0:
@@ -40,6 +43,12 @@ class Game(metaclass=SingletonMeta):
         return result
 
     def next_turn(self) -> str:
+        """
+        Если игра окончена, то возвращает результат игры.
+        Выполняет функцию удара противника.
+        Возвращает результат действий противника.
+        Выполняет пополнение выносливости игроков.
+        """
         if results := self._check_health():
             return results
         if not self.game_processing:
@@ -51,6 +60,11 @@ class Game(metaclass=SingletonMeta):
         return results
 
     def enemy_hit(self) -> str:
+        """
+        Если у противника достаточно выносливости на удар,
+        то игроку наносится урон и возвращается результат удара.
+        Иначе возвращается соотв. сообщение.
+        """
         delta_damage: Optional[float] = self.enemy.hit(self.player)
         if delta_damage is not None:
             self.player.take_damage(delta_damage)
@@ -60,6 +74,11 @@ class Game(metaclass=SingletonMeta):
         return results
 
     def player_hit(self) -> str:
+        """
+        Если у игрока достаточно выносливости на удар,
+        то противнику наносится урон и возвращается результат удара.
+        Иначе возвращается соотв. сообщение.
+        """
         delta_damage: Optional[float] = self.player.hit(self.enemy)
         if delta_damage is not None:
             self.enemy.take_damage(delta_damage)
@@ -67,8 +86,13 @@ class Game(metaclass=SingletonMeta):
         return f'<p>Вам не хватило выносливости на удар.</p><p>{self.next_turn()}</p>'
 
     def player_use_skill(self) -> str:
+        """
+        Если у игрока достаточно выносливости на умение,
+        то противнику наносится урон и возвращается результат применения умения.
+        Иначе возвращается соотв. сообщение.
+        """
         delta_damage: Optional[float] = self.player.use_skill()
         if delta_damage is not None:
             self.enemy.take_damage(delta_damage)
             return f'<p>Вы нанесли урон {delta_damage} врагу!</p><p>{self.next_turn()}</p>'
-        return f'<p>Вам не хватило выносливости на удар.</p><p>{self.next_turn()}</p>'
+        return f'<p>Вам не хватило выносливости на умение.</p><p>{self.next_turn()}</p>'
